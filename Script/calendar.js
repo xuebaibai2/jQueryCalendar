@@ -38,11 +38,26 @@
         }
     },
     addEventSource: function (eventSourceArray) {
+        this.resetCalendar();
         this.model.eventSourceArray = eventSourceArray;
-        this.finterStagingEvents();
+        this.filterStagingEvents();
         this.renderEvents();
     },
-    finterStagingEvents: function () {
+    resetCalendar: function () {
+        this.model.displayEvents = { am: { }, pm: { } };
+        var $amTr = $("#am td");
+        var $pmTr = $("#pm td");
+        for (var i = 0; i < 2; i++) {
+            var $currentRow = i === 0 ? $amTr : $pmTr;
+            for (var j = 0; j < 5; j++) {
+                var $tempTd = $($currentRow[j]);
+                $tempTd.removeClass();
+                $tempTd.off("click");
+                $tempTd.unbind("mouseenter mouseleave");
+            }
+        }
+    },
+    filterStagingEvents: function () {
         var startDate = this.model.date.weekday(0).format();
         var endDate = this.model.date.weekday(5).format();
         var self = this;
@@ -99,6 +114,7 @@
                     var tempEventDate = moment(tempTour.start).format("YYYY-MM-DD");
                     if (self.isSameDateTime(tempDate, tempEventDate)) {
                         var renderText = moment(tempTour.start).format("h:mm a") + " - " + moment(tempTour.end).format("h:mm a");
+                        //var renderText = tempTour.title;
                         $tempTd.text(renderText);
                         $tempTd.addClass(tempTour.id);
                         $tempTd.off("click").on("click", this.eventTourClick.bind(this));
@@ -145,15 +161,17 @@
         });
     },
     eventPreBtnClicked: function () {
+        this.resetCalendar();
         this.model.date = this.model.date.weekday(-7);
         this.updateCalendarHeader();
-        this.finterStagingEvents();
+        this.filterStagingEvents();
         this.renderEvents();
     },
     eventNextBtnClicked: function () {
+        this.resetCalendar();
         this.model.date = this.model.date.weekday(7);
         this.updateCalendarHeader();
-        this.finterStagingEvents();
+        this.filterStagingEvents();
         this.renderEvents();
     },
     updateCalendarHeader: function () {
