@@ -1,0 +1,24 @@
+﻿#syjma_calendar {
+    width: 750px;
+}
+.calendarTbl {
+    border: 1px solid black;
+}
+    .calendarTbl tr th {
+        border: 1px solid blue;
+    }
+    .calendarTbl tr td {
+        min-width: 150px;
+        height: 40px;
+        border: 1px solid blue;
+    }
+
+button#preWeekBtn{
+    float: left;
+}
+button#nextWeekBtn {
+    float: right;
+}
+td.enable{
+    cursor:pointer;
+}
